@@ -29,6 +29,17 @@ def links(deployconf, timestr):
 			# Relative path
 			run('ln -s {0}{1} {0}{2}/{3}'.format(deployconf['site_dir'], k, timestr, v))
 	
+
+@task
+def chmod_777(deployconf, timestr):
+	for k, v in deployconf['chmod777'].iteritems():
+		if (re.match('^\/.*', k)):
+			# Absolute path
+			run('chmod 777 {1}{2}/{3} -R'.format(k, deployconf['site_dir'], timestr, v))
+		else:
+			# Relative path
+			run('chmod 777 {0}{2}/{3} -R'.format(deployconf['site_dir'], k, timestr, v))
+
 @task
 def current_link(deployconf, timestr):
 	linkname = '{0}{1}'.format(deployconf['site_dir'], deployconf['current_dir'])
